@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.managerial_system.mapper.AchievementMapper">
+  <resultMap id="BaseResultMap" type="com.liu.managerial_system.domain.Achievement">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="achieve_catagory" jdbcType="VARCHAR" property="achieveCatagory" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="first_author" jdbcType="VARCHAR" property="firstAuthor" />
+    <result column="second_author" jdbcType="VARCHAR" property="secondAuthor" />
+    <result column="third_author" jdbcType="VARCHAR" property="thirdAuthor" />
+    <result column="other_authors" jdbcType="VARCHAR" property="otherAuthors" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="funds" jdbcType="VARCHAR" property="funds" />
+    <result column="process" jdbcType="VARCHAR" property="process" />
+    <result column="resource" jdbcType="VARCHAR" property="resource" />
+    <result column="application" jdbcType="VARCHAR" property="application" />
+    <result column="othermsg" jdbcType="VARCHAR" property="othermsg" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, achieve_catagory, `name`, first_author, second_author, third_author, other_authors, 
+    `level`, `time`, funds, `process`, `resource`, `application`, othermsg, username
+  </sql>
+  <select id="selectByExample" parameterType="com.liu.managerial_system.domain.AchievementExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from achievement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from achievement
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from achievement
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.liu.managerial_system.domain.AchievementExample">
+    delete from achievement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.liu.managerial_system.domain.Achievement">
+    insert into achievement (id, achieve_catagory, `name`, 
+      first_author, second_author, third_author, 
+      other_authors, `level`, `time`, 
+      funds, `process`, `resource`, 
+      `application`, othermsg, username
+      )
+    values (#{id,jdbcType=VARCHAR}, #{achieveCatagory,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{firstAuthor,jdbcType=VARCHAR}, #{secondAuthor,jdbcType=VARCHAR}, #{thirdAuthor,jdbcType=VARCHAR}, 
+      #{otherAuthors,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}, 
+      #{funds,jdbcType=VARCHAR}, #{process,jdbcType=VARCHAR}, #{resource,jdbcType=VARCHAR}, 
+      #{application,jdbcType=VARCHAR}, #{othermsg,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.liu.managerial_system.domain.Achievement">
+    insert into achievement
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="achieveCatagory != null">
+        achieve_catagory,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="firstAuthor != null">
+        first_author,
+      </if>
+      <if test="secondAuthor != null">
+        second_author,
+      </if>
+      <if test="thirdAuthor != null">
+        third_author,
+      </if>
+      <if test="otherAuthors != null">
+        other_authors,
+      </if>
+      <if test="level != null">
+        `level`,
+      </if>
+      <if test="time != null">
+        `time`,
+      </if>
+      <if test="funds != null">
+        funds,
+      </if>
+      <if test="process != null">
+        `process`,
+      </if>
+      <if test="resource != null">
+        `resource`,
+      </if>
+      <if test="application != null">
+        `application`,
+      </if>
+      <if test="othermsg != null">
+        othermsg,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="achieveCatagory != null">
+        #{achieveCatagory,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="firstAuthor != null">
+        #{firstAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="secondAuthor != null">
+        #{secondAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdAuthor != null">
+        #{thirdAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="otherAuthors != null">
+        #{otherAuthors,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="funds != null">
+        #{funds,jdbcType=VARCHAR},
+      </if>
+      <if test="process != null">
+        #{process,jdbcType=VARCHAR},
+      </if>
+      <if test="resource != null">
+        #{resource,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null">
+        #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="othermsg != null">
+        #{othermsg,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.liu.managerial_system.domain.AchievementExample" resultType="java.lang.Long">
+    select count(*) from achievement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update achievement
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.achieveCatagory != null">
+        achieve_catagory = #{record.achieveCatagory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstAuthor != null">
+        first_author = #{record.firstAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.secondAuthor != null">
+        second_author = #{record.secondAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thirdAuthor != null">
+        third_author = #{record.thirdAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.otherAuthors != null">
+        other_authors = #{record.otherAuthors,jdbcType=VARCHAR},
+      </if>
+      <if test="record.level != null">
+        `level` = #{record.level,jdbcType=VARCHAR},
+      </if>
+      <if test="record.time != null">
+        `time` = #{record.time,jdbcType=VARCHAR},
+      </if>
+      <if test="record.funds != null">
+        funds = #{record.funds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.process != null">
+        `process` = #{record.process,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resource != null">
+        `resource` = #{record.resource,jdbcType=VARCHAR},
+      </if>
+      <if test="record.application != null">
+        `application` = #{record.application,jdbcType=VARCHAR},
+      </if>
+      <if test="record.othermsg != null">
+        othermsg = #{record.othermsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update achievement
+    set id = #{record.id,jdbcType=VARCHAR},
+      achieve_catagory = #{record.achieveCatagory,jdbcType=VARCHAR},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      first_author = #{record.firstAuthor,jdbcType=VARCHAR},
+      second_author = #{record.secondAuthor,jdbcType=VARCHAR},
+      third_author = #{record.thirdAuthor,jdbcType=VARCHAR},
+      other_authors = #{record.otherAuthors,jdbcType=VARCHAR},
+      `level` = #{record.level,jdbcType=VARCHAR},
+      `time` = #{record.time,jdbcType=VARCHAR},
+      funds = #{record.funds,jdbcType=VARCHAR},
+      `process` = #{record.process,jdbcType=VARCHAR},
+      `resource` = #{record.resource,jdbcType=VARCHAR},
+      `application` = #{record.application,jdbcType=VARCHAR},
+      othermsg = #{record.othermsg,jdbcType=VARCHAR},
+      username = #{record.username,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.liu.managerial_system.domain.Achievement">
+    update achievement
+    <set>
+      <if test="achieveCatagory != null">
+        achieve_catagory = #{achieveCatagory,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="firstAuthor != null">
+        first_author = #{firstAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="secondAuthor != null">
+        second_author = #{secondAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdAuthor != null">
+        third_author = #{thirdAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="otherAuthors != null">
+        other_authors = #{otherAuthors,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        `level` = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        `time` = #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="funds != null">
+        funds = #{funds,jdbcType=VARCHAR},
+      </if>
+      <if test="process != null">
+        `process` = #{process,jdbcType=VARCHAR},
+      </if>
+      <if test="resource != null">
+        `resource` = #{resource,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null">
+        `application` = #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="othermsg != null">
+        othermsg = #{othermsg,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.liu.managerial_system.domain.Achievement">
+    update achievement
+    set achieve_catagory = #{achieveCatagory,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      first_author = #{firstAuthor,jdbcType=VARCHAR},
+      second_author = #{secondAuthor,jdbcType=VARCHAR},
+      third_author = #{thirdAuthor,jdbcType=VARCHAR},
+      other_authors = #{otherAuthors,jdbcType=VARCHAR},
+      `level` = #{level,jdbcType=VARCHAR},
+      `time` = #{time,jdbcType=VARCHAR},
+      funds = #{funds,jdbcType=VARCHAR},
+      `process` = #{process,jdbcType=VARCHAR},
+      `resource` = #{resource,jdbcType=VARCHAR},
+      `application` = #{application,jdbcType=VARCHAR},
+      othermsg = #{othermsg,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

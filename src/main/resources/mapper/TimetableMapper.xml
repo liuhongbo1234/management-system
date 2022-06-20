@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.managerial_system.mapper.TimetableMapper">
+  <resultMap id="BaseResultMap" type="com.liu.managerial_system.domain.Timetable">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="coursename" jdbcType="VARCHAR" property="coursename" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="place" jdbcType="VARCHAR" property="place" />
+    <result column="specialty" jdbcType="VARCHAR" property="specialty" />
+    <result column="dayofweek" jdbcType="VARCHAR" property="dayofweek" />
+    <result column="week" jdbcType="VARCHAR" property="week" />
+    <result column="changed" jdbcType="VARCHAR" property="changed" />
+    <result column="oldid" jdbcType="VARCHAR" property="oldid" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, username, coursename, `time`, place, specialty, `dayofweek`, week, changed, oldid, 
+    `date`
+  </sql>
+  <select id="selectByExample" parameterType="com.liu.managerial_system.domain.TimetableExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from timetable
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from timetable
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from timetable
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.liu.managerial_system.domain.TimetableExample">
+    delete from timetable
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.liu.managerial_system.domain.Timetable">
+    insert into timetable (id, username, coursename, 
+      `time`, place, specialty, 
+      `dayofweek`, week, changed, 
+      oldid, `date`)
+    values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{coursename,jdbcType=VARCHAR}, 
+      #{time,jdbcType=VARCHAR}, #{place,jdbcType=VARCHAR}, #{specialty,jdbcType=VARCHAR}, 
+      #{dayofweek,jdbcType=VARCHAR}, #{week,jdbcType=VARCHAR}, #{changed,jdbcType=VARCHAR}, 
+      #{oldid,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.liu.managerial_system.domain.Timetable">
+    insert into timetable
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="coursename != null">
+        coursename,
+      </if>
+      <if test="time != null">
+        `time`,
+      </if>
+      <if test="place != null">
+        place,
+      </if>
+      <if test="specialty != null">
+        specialty,
+      </if>
+      <if test="dayofweek != null">
+        `dayofweek`,
+      </if>
+      <if test="week != null">
+        week,
+      </if>
+      <if test="changed != null">
+        changed,
+      </if>
+      <if test="oldid != null">
+        oldid,
+      </if>
+      <if test="date != null">
+        `date`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="coursename != null">
+        #{coursename,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="place != null">
+        #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="specialty != null">
+        #{specialty,jdbcType=VARCHAR},
+      </if>
+      <if test="dayofweek != null">
+        #{dayofweek,jdbcType=VARCHAR},
+      </if>
+      <if test="week != null">
+        #{week,jdbcType=VARCHAR},
+      </if>
+      <if test="changed != null">
+        #{changed,jdbcType=VARCHAR},
+      </if>
+      <if test="oldid != null">
+        #{oldid,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.liu.managerial_system.domain.TimetableExample" resultType="java.lang.Long">
+    select count(*) from timetable
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update timetable
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coursename != null">
+        coursename = #{record.coursename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.time != null">
+        `time` = #{record.time,jdbcType=VARCHAR},
+      </if>
+      <if test="record.place != null">
+        place = #{record.place,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specialty != null">
+        specialty = #{record.specialty,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dayofweek != null">
+        `dayofweek` = #{record.dayofweek,jdbcType=VARCHAR},
+      </if>
+      <if test="record.week != null">
+        week = #{record.week,jdbcType=VARCHAR},
+      </if>
+      <if test="record.changed != null">
+        changed = #{record.changed,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oldid != null">
+        oldid = #{record.oldid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.date != null">
+        `date` = #{record.date,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update timetable
+    set id = #{record.id,jdbcType=VARCHAR},
+      username = #{record.username,jdbcType=VARCHAR},
+      coursename = #{record.coursename,jdbcType=VARCHAR},
+      `time` = #{record.time,jdbcType=VARCHAR},
+      place = #{record.place,jdbcType=VARCHAR},
+      specialty = #{record.specialty,jdbcType=VARCHAR},
+      `dayofweek` = #{record.dayofweek,jdbcType=VARCHAR},
+      week = #{record.week,jdbcType=VARCHAR},
+      changed = #{record.changed,jdbcType=VARCHAR},
+      oldid = #{record.oldid,jdbcType=VARCHAR},
+      `date` = #{record.date,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.liu.managerial_system.domain.Timetable">
+    update timetable
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="coursename != null">
+        coursename = #{coursename,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        `time` = #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="place != null">
+        place = #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="specialty != null">
+        specialty = #{specialty,jdbcType=VARCHAR},
+      </if>
+      <if test="dayofweek != null">
+        `dayofweek` = #{dayofweek,jdbcType=VARCHAR},
+      </if>
+      <if test="week != null">
+        week = #{week,jdbcType=VARCHAR},
+      </if>
+      <if test="changed != null">
+        changed = #{changed,jdbcType=VARCHAR},
+      </if>
+      <if test="oldid != null">
+        oldid = #{oldid,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        `date` = #{date,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.liu.managerial_system.domain.Timetable">
+    update timetable
+    set username = #{username,jdbcType=VARCHAR},
+      coursename = #{coursename,jdbcType=VARCHAR},
+      `time` = #{time,jdbcType=VARCHAR},
+      place = #{place,jdbcType=VARCHAR},
+      specialty = #{specialty,jdbcType=VARCHAR},
+      `dayofweek` = #{dayofweek,jdbcType=VARCHAR},
+      week = #{week,jdbcType=VARCHAR},
+      changed = #{changed,jdbcType=VARCHAR},
+      oldid = #{oldid,jdbcType=VARCHAR},
+      `date` = #{date,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

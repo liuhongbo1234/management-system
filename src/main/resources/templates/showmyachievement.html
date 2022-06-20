@@ -1,0 +1,691 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>个人业绩</title>
+    <meta name="description" content="Static &amp; Dynamic Tables"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <link rel="stylesheet" href="./assets/css/jquery-ui.custom.min.css"/>
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css"/>
+    <!-- page specific plugin styles -->
+    <!-- text fonts -->
+    <link rel="stylesheet" href="assets/css/fonts.googleapis.com.css"/>
+    <!-- ace styles -->
+    <link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style"/>
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="assets/css/ace-part2.min.css" class="ace-main-stylesheet"/>
+    <![endif]-->
+    <link rel="stylesheet" href="assets/css/ace-skins.min.css"/>
+    <link rel="stylesheet" href="assets/css/ace-rtl.min.css"/>
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="assets/css/ace-ie.min.css"/>
+    <![endif]-->
+    <!-- inline styles related to this page -->
+    <!-- ace settings handler -->
+    <script src="assets/js/ace-extra.min.js"></script>
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+    <!--[if lte IE 8]>
+    <script src="assets/js/html5shiv.min.js"></script>
+    <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="no-skin">
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="#">主页</a>
+                    </li>
+                    <li class="active">我的业绩</li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>
+                        我的业绩
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            可在此页面查看&修改&删除业绩资料
+                        </small>
+                    </h1>
+                </div><!-- /.page-header -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-header">
+                                    个人业绩
+                                </div>
+                                <div style="height:500px;overflow-y: scroll">
+                                    <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 100px;">类别</th>
+                                            <th style="width: 300px;">名称</th>
+                                            <th style="width: 150px;">级别</th>
+                                            <th style="width: 100px;">
+                                                <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
+                                                时间
+                                            </th>
+                                            <th style="width: 100px;">进展</th>
+                                            <th style="width: 100px;">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="u:${achievementList}">
+                                            <td th:text="${u.achieveCatagory}"></td>
+                                            <td th:text="${u.name}"></td>
+                                            <td th:text="${u.level}"></td>
+                                            <td th:text="${u.time}" style="width: 100px"></td>
+                                            <td th:text="${u.process}" style="width: 30px"></td>
+                                            <td>
+                                                <div class="hidden-sm hidden-xs action-buttons">
+                                                    <a class="blue" href="#"
+                                                       th:onclick="'javascript:showdetails(\''+${u.id}+'\')'">
+                                                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                                    </a>
+                                                    <a class="red" href="#"
+                                                       th:onclick="'javascript:deleteAchieve(\''+${u.id}+'\',\''+${u.name}+'\')'">
+                                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 900px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="closeModal()">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="my-modal-title">
+                    可在此页面查看&修改业绩成果
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-7">
+                        <div class="space visible-xs"></div>
+                        <form id="edit-my-achievement" method="post" action="/manage/achieve/edit_achieve"
+                              onsubmit="return false">
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 类别</div>
+                                    <div class="profile-info-value">
+                                        <select class="col-xs-10 col-sm-5" id="achieveCatagory" name="achieveCatagory"
+                                                data-placeholder="选择类别">
+                                            <option value="科研成果">科研成果</option>
+                                            <option value="课题研究">课题研究</option>
+                                            <option value="教育教学">教育教学</option>
+                                            <option value="论文专著">论文专著</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 名称</div>
+                                    <div class="profile-info-value">
+                                        <input style="border:0px;outline: none;width: 100%" id="name" name="name"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 第一作者</div>
+                                    <div class="profile-info-value">
+                                        <input style="border:0px;outline: none;width: 100%" id="firstAuthor"
+                                               name="firstAuthor"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 第二作者</div>
+                                    <div class="profile-info-value">
+                                        <input style="border:0px;outline: none;width: 100%" id="secondAuthor"
+                                               name="secondAuthor"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 第三作者</div>
+                                    <div class="profile-info-value">
+                                        <input style="border:0px;outline: none;width: 100%" id="thirdAuthor"
+                                               name="thirdAuthor"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 其他作者</div>
+                                    <div class="profile-info-value">
+                                        <input style="border:0px;outline: none;width: 100%" id="otherAuthors"
+                                               value="" name="otherAuthors"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 级别</div>
+                                    <div class="profile-info-value">
+                                        <input style="border:0px;outline: none;width: 100%" id="level" name="level"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 时间</div>
+                                    <div class="profile-info-value">
+                                        <input style="border:0px;outline: none;width: 100%" id="time" name="time"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 进展</div>
+                                    <div class="profile-info-value">
+                                        <input style="border:0px;outline: none;width: 100%" id="process" name="process"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 来源</div>
+                                    <div class="profile-info-value">
+                                        <input style="border:0px;outline: none;width: 100%" id="resource"
+                                               name="resource"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 经费</div>
+                                    <div class="profile-info-value">
+                                        <input style="border:0px;outline: none;width: 100%" id="funds" name="funds"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 应用领域</div>
+                                    <div class="profile-info-value">
+                                        <input style="border:0px;outline: none;width: 100%" id="application"
+                                               name="application"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 其他信息</div>
+                                    <div class="profile-info-value">
+                                    <textarea style="border:0px;outline: none;width: 100%" id="othermsg" name="othermsg"
+                                              value=""></textarea>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="id" id="id" value=""/>
+                            </div>
+                        </form>
+                        <div class="clearfix">
+                            <button onclick="submitEdit()" class="pull-right btn btn-sm btn-primary btn-white btn-round"
+                                    type="submit">
+                                保存修改
+                                <i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <ul id="tree2" style="width: 300px"></ul>
+                        <div class="hr hr-dotted"></div>
+                        <br><br><br>
+                        <div class="clearfix">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div class="form-group">
+                                        <div class="col-xs-12">
+                                            <form enctype="multipart/form-data" th:method="post"
+                                                  th:action="@{/achieve/add_new_files}">
+                                                <input type="hidden" id="dirid" name="dirid" value=""/>
+                                                <input multiple="" type="file" name="files" id="id-input-file"/>
+                                                <input class="pull-right btn btn-sm btn-primary btn-white btn-round"
+                                                       type="submit" value="确认添加">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<script src="./assets/js/jquery-2.1.4.min.js"></script>
+<!-- <![endif]-->
+<!--[if IE]>
+<script src="./assets/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    if ('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+</script>
+<![endif]-->
+<script src="./assets/js/bootstrap.min.js"></script>
+
+<!-- page specific plugin scripts -->
+
+<!--[if lte IE 8]>
+<script src="./assets/js/excanvas.min.js"></script>
+<![endif]-->
+<script src="./assets/js/jquery-ui.custom.min.js"></script>
+<script src="./assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="./assets/js/jquery.easypiechart.min.js"></script>
+<script src="./assets/js/jquery.sparkline.index.min.js"></script>
+<script src="./assets/js/jquery.flot.min.js"></script>
+<script src="./assets/js/jquery.flot.pie.min.js"></script>
+<script src="./assets/js/jquery.flot.resize.min.js"></script>
+
+<!-- page specific plugin scripts -->
+<script src="./assets/js/jquery.dataTables.min.js"></script>
+<script src="./assets/js/jquery.dataTables.bootstrap.min.js"></script>
+<script src="./assets/js/dataTables.buttons.min.js"></script>
+<script src="./assets/js/buttons.flash.min.js"></script>
+<script src="./assets/js/buttons.html5.min.js"></script>
+<script src="./assets/js/buttons.print.min.js"></script>
+<script src="./assets/js/buttons.colVis.min.js"></script>
+<script src="./assets/js/dataTables.select.min.js"></script>
+<script src="./assets/js/bootbox.js"></script>
+
+<!-- ace scripts -->
+<script src="./assets/js/tree.min.js"></script>
+
+<script src="./assets/js/ace-elements.min.js"></script>
+<script src="./assets/js/ace.min.js"></script>
+<script src="./assets/js/echarts.min.js"></script>
+<script src="./assets/css/layui.css"></script>
+<script src="./assets/css/dtree.css"></script>
+<script src="./assets/css/dtreefont.css"></script>
+<script src="./assets/js/layui.js"></script>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+
+        $('#id-input-file').ace_file_input({
+            style: 'well',
+            btn_choose: '点击此处新增文件',
+            btn_change: null,
+            no_icon: 'ace-icon fa fa-cloud-upload',
+            droppable: true,
+            thumbnail: 'small'//large | fit
+            //,icon_remove:null//set null, to hide remove/reset button
+            /**,before_change:function(files, dropped) {
+						//Check an example below
+						//or examples/file-upload.html
+						return true;
+					}*/
+            /**,before_remove : function() {
+						return true;
+					}*/
+            ,
+            preview_error: function (filename, error_code) {
+                //name of the file that failed
+                //error_code values
+                //1 = 'FILE_LOAD_FAILED',
+                //2 = 'IMAGE_LOAD_FAILED',
+                //3 = 'THUMBNAIL_FAILED'
+                //alert(error_code);
+            }
+
+        }).on('change', function () {
+            //console.log($(this).data('ace_input_files'));
+            //console.log($(this).data('ace_input_method'));
+        });
+
+
+        var myTable =
+            $('#dynamic-table')
+                .DataTable({
+                    bAutoWidth: false,
+                    "aoColumns": [
+                        // {"bSortable": false},
+                        null, null, null, null, null,
+                        {"bSortable": false}
+                    ],
+                    "aaSorting": [],
+                    select: {
+                        style: 'multi'
+                    }
+                });
+        $.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+        myTable.buttons().container().appendTo($('.tableTools-container'));
+
+        //style the message box
+        var defaultCopyAction = myTable.button(1).action();
+        myTable.button(1).action(function (e, dt, button, config) {
+            defaultCopyAction(e, dt, button, config);
+            $('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
+        });
+        var defaultColvisAction = myTable.button(0).action();
+        myTable.button(0).action(function (e, dt, button, config) {
+            defaultColvisAction(e, dt, button, config);
+            if ($('.dt-button-collection > .dropdown-menu').length == 0) {
+                $('.dt-button-collection')
+                    .wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
+                    .find('a').attr('href', '#').wrap("<li />")
+            }
+            $('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
+        });
+
+        setTimeout(function () {
+            $($('.tableTools-container')).find('a.dt-button').each(function () {
+                var div = $(this).find(' > div').first();
+                if (div.length == 1) div.tooltip({container: 'body', title: div.parent().text()});
+                else $(this).tooltip({container: 'body', title: $(this).text()});
+            });
+        }, 500);
+
+        myTable.on('select', function (e, dt, type, index) {
+            if (type === 'row') {
+                $(myTable.row(index).node()).find('input:checkbox').prop('checked', true);
+            }
+        });
+        myTable.on('deselect', function (e, dt, type, index) {
+            if (type === 'row') {
+                $(myTable.row(index).node()).find('input:checkbox').prop('checked', false);
+            }
+        });
+
+        $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+        //select/deselect all rows according to table header checkbox
+        $('#dynamic-table > thead > tr > th input[type=checkbox], #dynamic-table_wrapper input[type=checkbox]').eq(0).on('click', function () {
+            var th_checked = this.checked;//checkbox inside "TH" table header
+
+            $('#dynamic-table').find('tbody > tr').each(function () {
+                var row = this;
+                if (th_checked) myTable.row(row).select();
+                else myTable.row(row).deselect();
+            });
+        });
+        //select/deselect a row when the checkbox is checked/unchecked
+        $('#dynamic-table').on('click', 'td input[type=checkbox]', function () {
+            var row = $(this).closest('tr').get(0);
+            if (this.checked) myTable.row(row).deselect();
+            else myTable.row(row).select();
+        });
+        $(document).on('click', '#dynamic-table .dropdown-toggle', function (e) {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            e.preventDefault();
+        });
+
+
+        //And for the first simple table, which doesn't have TableTools or dataTables
+        //select/deselect all rows according to table header checkbox
+        var active_class = 'active';
+        $('#dynamic-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function () {
+            var th_checked = this.checked;//checkbox inside "TH" table header
+            $(this).closest('table').find('tbody > tr').each(function () {
+                var row = this;
+                if (th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+                else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+            });
+        });
+        //select/deselect a row when the checkbox is checked/unchecked
+        $('#dynamic-table').on('click', 'td input[type=checkbox]', function () {
+            var $row = $(this).closest('tr');
+            if ($row.is('.detail-row ')) return;
+            if (this.checked) $row.addClass(active_class);
+            else $row.removeClass(active_class);
+        });
+
+
+        /********************************/
+        //add tooltip for small view action buttons in dropdown menu
+        $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+
+        //tooltip placement on right or left
+        function tooltip_placement(context, source) {
+            var $source = $(source);
+            var $parent = $source.closest('table')
+            var off1 = $parent.offset();
+            var w1 = $parent.width();
+            var off2 = $source.offset();
+            //var w2 = $source.width();
+            if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2)) return 'right';
+            return 'left';
+        }
+
+
+        /***************/
+        $('.show-details-btn').on('click', function (e) {
+            // e.preventDefault();
+            $(this).closest('tr').next().toggleClass('open');
+            $(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
+        });
+
+        /***************/
+
+
+        /**
+         //add horizontal scrollbars to a simple table
+         $('#simple-table').css({'width':'2000px', 'max-width': 'none'}).wrap('<div style="width: 1000px;" />').parent().ace_scroll(
+         {
+         horizontal: true,
+         styleClass: 'scroll-top scroll-dark scroll-visible',//show the scrollbars on top(default is bottom)
+         size: 2000,
+         mouseWheelLock: true
+         }
+         ).css('padding-top', '12px');
+         */
+    });
+
+    function submitEdit() {
+        var form = $("#edit-my-achievement");
+        $.ajax({
+            url: "/manage/achieve/edit_achieve",
+            type: "post",
+            // dataType: "json",
+            data: {
+                formdata: JSON.stringify(form.serializeArray()),
+            },
+            async:
+                false,
+            cache:
+                false,
+            success:
+                function (achievement) {
+                    window.location.reload();
+                },
+            error: function (error) {
+                alert("服务器出错!!！");
+            }
+        });
+        // alert(form.serialize());
+        // alert(form.serializeArray());
+    }
+
+    function showdetails(id) {
+        $("#myModal").modal("show");
+        $.ajax({
+            url: "/manage/achieve/get_achievement_by_id",
+            type: "post",
+            dataType: "json",
+            data: {
+                id: id,
+            },
+            async:
+                false,
+            cache:
+                false,
+            success:
+                function (achievement) {
+                    $("#dirid").val(id);
+                    $.each(achievement, function (index, item) {
+                        $("#achieveCatagory").val(item.achieveCatagory);
+                        $("#firstAuthor").val(item.firstAuthor);
+                        $("#thirdAuthor").val(item.thirdAuthor);
+                        $("#secondAuthor").val(item.secondAuthor);
+                        $("#otherAuthors").val(item.otherAuthors);
+                        $("#resource").val(item.resource);
+                        $("#process").val(item.process);
+                        $("#othermsg").val(item.othermsg);
+                        $("#application").val(item.application);
+                        $("#funds").val(item.funds);
+                        $("#level").val(item.level);
+                        $("#name").val(item.name);
+                        $("#time").val(item.time);
+                        $("#id").val(item.id);
+                    });
+                },
+            error: function (error) {
+                alert("服务器出错！");
+            }
+        });
+        var sampleData = initiateDemoData(id);
+        $('#tree2').ace_tree({
+            dataSource: sampleData['dataSource2'],
+            loadingHTML: '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
+            'open-icon': 'ace-icon fa fa-folder-open',
+            'close-icon': 'ace-icon fa fa-folder',
+            'itemSelect': true,
+            'folderSelect': true,
+            'multiSelect': true,
+            'selected-icon': null,
+            'unselected-icon': null,
+            'folder-open-icon': 'ace-icon tree-plus',
+            'folder-close-icon': 'ace-icon tree-minus'
+        });
+    }
+
+
+    function initiateDemoData(id) {
+        var filesList;
+        var dataSource2 = function (options, callback) {
+            var $data = null;
+            var tree_data_2 = {
+                'documents': {text: '文件资料', type: 'folder', 'icon-class': 'green'},
+            };
+            $.ajax({
+                url: "/manage/achieve/get_achievement_files_by_id",
+                type: "post",
+                dataType: "json",
+                data: {
+                    id: id,
+                },
+                async:
+                    false,
+                cache:
+                    false,
+                success: function (files) {
+                    filesList = files;
+                },
+                error: function (error) {
+                    alert("服务器出错！");
+                }
+            });
+            tree_data_2['documents']['additionalParameters'] = {
+                'children': filesList
+            }
+            ;
+            if (!("text" in options) && !("type" in options)) {
+                $data = tree_data_2;//the root tree
+                callback({data: $data});
+                return;
+            }
+            else if ("type" in options && options.type == "folder") {
+                if ("additionalParameters" in options && "children" in options.additionalParameters)
+                    $data = options.additionalParameters.children || {};
+                else $data = {}//no data
+            }
+            if ($data != null)//this setTimeout is only for mimicking some random delay
+                setTimeout(function () {
+                    callback({data: $data});
+                }, parseInt(Math.random() * 500) + 200);
+
+        }
+        return {'dataSource2': dataSource2}
+    }
+
+    function deleteAchieve(id, name) {
+        bootbox.confirm({
+            buttons: {
+                confirm: {
+                    label: '确认',
+                    className: 'btn-myStyle'
+                },
+                cancel: {
+                    label: '取消',
+                    className: 'btn-default'
+                }
+            },
+            message: '是否删除此条业绩记录？删除后无法恢复！',
+            callback: function (result) {
+                if (result) {
+                    $.ajax({
+                        url: "/manage/achieve/delete_achievement_by_id",
+                        type: "post",
+                        data: {
+                            id: id,
+                        },
+                        async:
+                            false,
+                        cache:
+                            false,
+                        success: function () {
+                            window.location.reload();
+                        },
+                        error: function (error) {
+                            alert("服务器出错！");
+                        }
+                    });
+                }
+            },
+            title: name,
+        });
+    };
+
+    function closeModal() {
+        window.location.reload();
+    }
+</script>
+</body>
+</html>

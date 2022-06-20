@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.managerial_system.mapper.ForleaveMapper">
+  <resultMap id="BaseResultMap" type="com.liu.managerial_system.domain.Forleave">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="startday" jdbcType="VARCHAR" property="startday" />
+    <result column="endday" jdbcType="VARCHAR" property="endday" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="department" jdbcType="VARCHAR" property="department" />
+    <result column="approval" jdbcType="VARCHAR" property="approval" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, username, startday, endday, reason, department, approval
+  </sql>
+  <select id="selectByExample" parameterType="com.liu.managerial_system.domain.ForleaveExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from forleave
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from forleave
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from forleave
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.liu.managerial_system.domain.ForleaveExample">
+    delete from forleave
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.liu.managerial_system.domain.Forleave">
+    insert into forleave (id, username, startday, 
+      endday, reason, department, 
+      approval)
+    values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{startday,jdbcType=VARCHAR}, 
+      #{endday,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+      #{approval,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.liu.managerial_system.domain.Forleave">
+    insert into forleave
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="startday != null">
+        startday,
+      </if>
+      <if test="endday != null">
+        endday,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="department != null">
+        department,
+      </if>
+      <if test="approval != null">
+        approval,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="startday != null">
+        #{startday,jdbcType=VARCHAR},
+      </if>
+      <if test="endday != null">
+        #{endday,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="approval != null">
+        #{approval,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.liu.managerial_system.domain.ForleaveExample" resultType="java.lang.Long">
+    select count(*) from forleave
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update forleave
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startday != null">
+        startday = #{record.startday,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endday != null">
+        endday = #{record.endday,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reason != null">
+        reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.department != null">
+        department = #{record.department,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approval != null">
+        approval = #{record.approval,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update forleave
+    set id = #{record.id,jdbcType=VARCHAR},
+      username = #{record.username,jdbcType=VARCHAR},
+      startday = #{record.startday,jdbcType=VARCHAR},
+      endday = #{record.endday,jdbcType=VARCHAR},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      department = #{record.department,jdbcType=VARCHAR},
+      approval = #{record.approval,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.liu.managerial_system.domain.Forleave">
+    update forleave
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="startday != null">
+        startday = #{startday,jdbcType=VARCHAR},
+      </if>
+      <if test="endday != null">
+        endday = #{endday,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="approval != null">
+        approval = #{approval,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.liu.managerial_system.domain.Forleave">
+    update forleave
+    set username = #{username,jdbcType=VARCHAR},
+      startday = #{startday,jdbcType=VARCHAR},
+      endday = #{endday,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      approval = #{approval,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
