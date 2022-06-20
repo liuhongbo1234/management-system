@@ -150,8 +150,6 @@ public class TaskService {
         if (userList != null && !userList.isEmpty()) {
             for (int i = 0; i < userList.size(); i++) {
                 highUser.add(userList.get(i).getUsername());
-                Logger LOG = LoggerFactory.getLogger(TaskService.class);
-                LOG.info(i + "::" + userList.get(i).getUsername());
             }
         }
 
