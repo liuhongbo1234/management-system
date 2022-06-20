@@ -104,7 +104,6 @@ public class TaskService {
         taskExample.setOrderByClause("start desc");
         List<String> depart = new ArrayList<>();
         depart.add(department);
-        depart.add("办公室");
         taskExample.createCriteria().andAssigndepartmentIn(depart);
         List<Task> taskList = taskMapper.selectByExample(taskExample);
         List<TaskDto> taskDtoList = CopyUtil.copyList(taskList, TaskDto.class);
